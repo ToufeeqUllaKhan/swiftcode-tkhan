@@ -11,12 +11,32 @@
 
    <md-card flex="none" layout="column">
        <md-content flex="90" id="message-pane" style="width:800px;
-       background: url(https://media.tenor.com/images/a434da76b7f1cee11d44029e13cbb394/tenor.gif);
+       background: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR45Sliig6Y6ycH3GZY3EiddPlZUE3GXQ_SxWdOddQsO7MPykr1);
        background-repeat:no-repeat;
        background-size:cover;
        background-position:right bottom">
 
+       <div ng-repeat="message in messages" layout="column"
+       layout-align="{{message.sender=='BOT' ? 
+       'start start' : 'start end'}}">
+
+          <md-card style="max-width:75%;border-radius: 10px; padding: 10px; font-size: 14px;"
+          ng-style="message.sender=='BOT'?
+          {'background-color':'white'}:
+          {'background-color':'grey'}">
+
+           <span>{{message.text}}</span>
+           <span ng-bind-html="trust(message.feedResponse.description)">{{message.feedResponse.description}}
+           </span>
+           <span layout-align="end end" style="margin-top: 4px; float: right; color:"black" ; font-size: 14px;"> {{message.time}} </span>
+
+        
+          </md-card> 
+       </div>
+
        </md-content>
+
+
        <md-card flex="10" style="margin: 0px" layout="row" layout-align="space-between center" class="md-whiteframe-8dp">
        <form flex="90" ng-submit="sendMessage()" layout="row">
                <md-input-container flex="100">
