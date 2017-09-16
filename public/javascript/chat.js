@@ -1,21 +1,23 @@
-var app=angular.module('chatApp',['ngMaterial']);
+var app = angular.module('chatApp',['ngMaterial']);
 
-app.controller('chatController',function($scope){
+app.controller('chatController',function($scope,$sce){
 	
-	$scope.messages =[{
-		sender:"BOT",text:"WHAT CAN I DO FOR YOU?",time:"1:15"
-	},
-	{
-		sender:"USER",text:"WHAT IS  1 +1",time:"1:20"
-	},
-	{
-		sender:"BOT",text:"2",time:"1:25"
-	},
-	];
+	$scope.messages =[];
 
-var  exampleSocket =  new  WebSocket("ws://localhost:9000/chatSocket");
-exampleSocket.onmessage  =   function  (event) {
-       var jsonData = JSON.parse(event.data);
-       console.log(jsonData);
-   };
+	var  exampleSocket =  new  WebSocket("ws://localhost:9000/chatSocket");
+ 	exampleSocket.onmessage  =   function  (event) {
+        var jsonData = JSON.parse(event.data);
+        jsonData.time = new Date().toLocaleTimeString();
+        $scope.messages.push(jsonData);
+        $scope.$apply(); 
+        console.log(jsonData);    
+    };
+
+    $scope.sendMessage = function () {    
+        exampleSocket.send($scope.userMessage);
+        $scope.userMessage = "";
+	};
+	
+	$scope.trust = $sce.trustAsHtml;
 });
+
